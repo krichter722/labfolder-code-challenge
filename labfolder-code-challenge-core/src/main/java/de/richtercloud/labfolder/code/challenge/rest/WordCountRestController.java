@@ -1,10 +1,12 @@
 package de.richtercloud.labfolder.code.challenge.rest;
 
+import de.richtercloud.labfolder.code.challenge.wordsupply.EmptyStringSuppliedException;
 import de.richtercloud.labfolder.code.challenge.wordsupply.WordSupplier;
 import java.util.LinkedList;
 import java.util.List;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -83,11 +85,22 @@ public class WordCountRestController {
      * source for real notebook data specified in the task.
      * @param username the name of the user to provide for
      * @param words the words to provide
+     * @return an empty response with code OK in case the request was valid or
+     *     a "bad request" response with a body explaining the exception
      */
     @PutMapping(value = PROVIDE_WORDS_METHOD+"/{"+USERNAME_PARAM+"}", consumes = {"application/json"})
-    public void provideWords(@PathVariable String username,
+    public ResponseEntity provideWords(@PathVariable String username,
             @RequestBody List<String> words) {
-        wordSupplier.provideWords(username,
-                words);
+        try {
+            wordSupplier.provideWords(username,
+                    words);
+            return ResponseEntity
+                    .ok()
+                    .build();
+        }catch(EmptyStringSuppliedException ex) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(ex.getMessage());
+        }
     }
 }

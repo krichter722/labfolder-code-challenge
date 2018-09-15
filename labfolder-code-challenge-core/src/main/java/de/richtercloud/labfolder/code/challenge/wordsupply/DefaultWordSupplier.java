@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
  * @author richter
  */
 @Service
+@SuppressWarnings("JavadocMethod")
 public class DefaultWordSupplier implements WordSupplier {
     /**
      * The provided words for each user.
@@ -39,6 +40,7 @@ public class DefaultWordSupplier implements WordSupplier {
         return userWords.stream();
     }
 
+    // CHECKSTYLE:OFF
     /**
      * Provide words for the next calls of {@link #supply() } until this method
      * is called with a different argument.
@@ -46,14 +48,24 @@ public class DefaultWordSupplier implements WordSupplier {
      * @param username the name of the user for whom to provide the words
      * @param words the provided words (mustn't be null or contain the empty
      *     string)
-     * @throws IllegalArgumentException if {@code words} is {@code null} or
-     *     contains the empty string
+     * @throws IllegalArgumentException if {@code words} is {@code null}
+     * @throws EmptyStringSuppliedException if {@code words} contains the empty
+     *     string
      */
     @Override
+    @SuppressWarnings({"PMD.JavadocMethod", "JavadocMethod"})
+        //the very annoying and long outstanding bug ?? in PMD and
+        //https://github.com/checkstyle/checkstyle/issues/5088 in checkstyle
+        //-> checkstyle seems suffer from this issue before scanning the
+        //comments (method including Javadoc surrounded by off-on comment) and
+        //and the annotations both on method and class level -> turn off static
+        //analysis because it's not worth figuring this out right now
     public void provideWords(String username,
-            List<String> words) throws IllegalArgumentException {
+            List<String> words) throws EmptyStringSuppliedException {
         Preconditions.checkArgument(words != null, "words mustn't be null");
-        Preconditions.checkArgument(!words.contains(""), "words mustn't contain the empty string (provision of empty string as word is conter-intuitive)");
+        if(words.contains("")) {
+            throw new EmptyStringSuppliedException("words mustn't contain the empty string (provision of empty string as word is conter-intuitive)");
+        }
         List<String> userWords = providedWords.get(username);
         if(userWords == null) {
             userWords = new LinkedList<>(words);
@@ -63,4 +75,5 @@ public class DefaultWordSupplier implements WordSupplier {
             userWords.addAll(words);
         }
     }
+    // CHECKSTYLE:ON
 }

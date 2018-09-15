@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import de.richtercloud.labfolder.code.challenge.Application;
 import de.richtercloud.labfolder.code.challenge.rest.WordCountResponse;
 import de.richtercloud.labfolder.code.challenge.rest.WordCountRestController;
+import de.richtercloud.labfolder.code.challenge.wordsupply.EmptyStringSuppliedException;
 import de.richtercloud.labfolder.code.challenge.wordsupply.WordSupplier;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.when;
@@ -15,6 +16,7 @@ import java.util.LinkedList;
 import org.apache.http.HttpStatus;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,7 +47,8 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountMissingKeyword() throws IOException {
+    public void testWordCountMissingKeyword() throws IOException,
+            EmptyStringSuppliedException {
         wordSupplier.provideWords("username",
                 new LinkedList<>());
 
@@ -59,7 +62,8 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountMissingUsername() throws IOException {
+    public void testWordCountMissingUsername() throws IOException,
+            EmptyStringSuppliedException {
         wordSupplier.provideWords("username",
                 new LinkedList<>());
 
@@ -73,7 +77,8 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountEmptyKeyword() throws IOException {
+    public void testWordCountEmptyKeyword() throws IOException,
+            EmptyStringSuppliedException {
         wordSupplier.provideWords("username",
                 new LinkedList<>());
 
@@ -92,7 +97,8 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountNonEmptyKeyword() throws IOException {
+    public void testWordCountNonEmptyKeyword() throws IOException,
+            EmptyStringSuppliedException {
         wordSupplier.provideWords("username",
                 new LinkedList<>());
 
@@ -111,7 +117,8 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountNoMatch() throws IOException {
+    public void testWordCountNoMatch() throws IOException,
+            EmptyStringSuppliedException {
         wordSupplier.provideWords("username",
                 new LinkedList<>(Arrays.asList("123")));
 
@@ -130,7 +137,8 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountNoMatchSimilar() throws IOException {
+    public void testWordCountNoMatchSimilar() throws IOException,
+            EmptyStringSuppliedException {
         wordSupplier.provideWords("username",
                 new LinkedList<>(Arrays.asList("y", "123")));
 
@@ -149,7 +157,8 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountMatchSimilar() throws IOException {
+    public void testWordCountMatchSimilar() throws IOException,
+            EmptyStringSuppliedException {
         wordSupplier.provideWords("username",
                 new LinkedList<>(Arrays.asList("x", "y", "123")));
 
@@ -168,7 +177,8 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountDifferentUser() throws IOException {
+    public void testWordCountDifferentUser() throws IOException,
+            EmptyStringSuppliedException {
         wordSupplier.provideWords("username1",
                 new LinkedList<>(Arrays.asList("x", "y", "123")));
 
@@ -217,6 +227,19 @@ public class LabfolderCodeChallengeIT {
                 .delete()
                 .then()
                         .statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
+    }
+
+    @Test
+    public void testProvideWordsEmptyString() throws IOException {
+        RequestSpecification request = RestAssured.with().basePath(String.format("%s%s/username",
+                WordCountRestController.PATH,
+                WordCountRestController.PROVIDE_WORDS_METHOD));
+        request.contentType("application/json")
+                .body("[\"abc\", \"\"]")
+                .put()
+                .then()
+                        .statusCode(HttpStatus.SC_BAD_REQUEST)
+                        .body(Matchers.equalTo("words mustn't contain the empty string (provision of empty string as word is conter-intuitive)"));
     }
 
     private class WordCountResponseDeserializationMatcher extends BaseMatcher<String> {

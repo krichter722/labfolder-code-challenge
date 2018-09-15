@@ -22,7 +22,7 @@ public class DefaultWordSupplierTest {
     }
 
     @Test
-    public void testSupplyProvision() {
+    public void testSupplyProvision() throws EmptyStringSuppliedException {
         DefaultWordSupplier instance = new DefaultWordSupplier();
         List<String> provision = new LinkedList<>(Arrays.asList("a", "abc"));
         instance.provideWords("username",
@@ -32,7 +32,7 @@ public class DefaultWordSupplierTest {
     }
 
     @Test
-    public void testSupplyProvisionEmpty() {
+    public void testSupplyProvisionEmpty() throws EmptyStringSuppliedException {
         DefaultWordSupplier instance = new DefaultWordSupplier();
         List<String> provision = new LinkedList<>();
         instance.provideWords("username",
@@ -42,7 +42,7 @@ public class DefaultWordSupplierTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testProvideWordsNull() {
+    public void testProvideWordsNull() throws EmptyStringSuppliedException {
         List<String> words = null;
         DefaultWordSupplier instance = new DefaultWordSupplier();
         instance.provideWords("username",
@@ -53,9 +53,10 @@ public class DefaultWordSupplierTest {
      * Tests that provision of the empty string as word causes
      * {@code IllegalArgumentException} since we don't expect a proper word
      * provider implementation to provide it.
+     * @throws EmptyStringSuppliedException expected
      */
-    @Test(expected = IllegalArgumentException.class)
-    public void testProvideWordsEmpty() {
+    @Test(expected = EmptyStringSuppliedException.class)
+    public void testProvideWordsEmpty() throws EmptyStringSuppliedException {
         List<String> words = new LinkedList<>(Arrays.asList("", "xyz"));
         DefaultWordSupplier instance = new DefaultWordSupplier();
         instance.provideWords("username",

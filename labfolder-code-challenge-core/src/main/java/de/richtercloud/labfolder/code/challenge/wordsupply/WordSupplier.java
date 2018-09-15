@@ -29,7 +29,10 @@ public interface WordSupplier {
      *
      * @param username the name of the user for whom to provide the words
      * @param words the provided words
+     * @throws EmptyStringSuppliedException if {@code words} contains the empty
+     *     string which is considered counter-intuitive to be expected in the
+     *     list of provided words
      */
     void provideWords(String username,
-            List<String> words);
+            List<String> words) throws EmptyStringSuppliedException;
 }
