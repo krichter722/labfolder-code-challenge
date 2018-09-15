@@ -9,7 +9,6 @@ import de.richtercloud.labfolder.code.challenge.wordsupply.WordSupplier;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.when;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.LinkedList;
 import org.apache.http.HttpStatus;
@@ -45,7 +44,7 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountMissingKeyword() throws MalformedURLException, IOException {
+    public void testWordCountMissingKeyword() throws IOException {
         wordSupplier.provideWords("username",
                 new LinkedList<>());
 
@@ -59,7 +58,7 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountMissingUsername() throws MalformedURLException, IOException {
+    public void testWordCountMissingUsername() throws IOException {
         wordSupplier.provideWords("username",
                 new LinkedList<>());
 
@@ -73,7 +72,7 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountEmptyKeyword() throws MalformedURLException, IOException {
+    public void testWordCountEmptyKeyword() throws IOException {
         wordSupplier.provideWords("username",
                 new LinkedList<>());
 
@@ -92,7 +91,7 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountNonEmptyKeyword() throws MalformedURLException, IOException {
+    public void testWordCountNonEmptyKeyword() throws IOException {
         wordSupplier.provideWords("username",
                 new LinkedList<>());
 
@@ -111,7 +110,7 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountNoMatch() throws MalformedURLException, IOException {
+    public void testWordCountNoMatch() throws IOException {
         wordSupplier.provideWords("username",
                 new LinkedList<>(Arrays.asList("123")));
 
@@ -130,7 +129,7 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountNoMatchSimilar() throws MalformedURLException, IOException {
+    public void testWordCountNoMatchSimilar() throws IOException {
         wordSupplier.provideWords("username",
                 new LinkedList<>(Arrays.asList("y", "123")));
 
@@ -149,7 +148,7 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountMatchSimilar() throws MalformedURLException, IOException {
+    public void testWordCountMatchSimilar() throws IOException {
         wordSupplier.provideWords("username",
                 new LinkedList<>(Arrays.asList("x", "y", "123")));
 
@@ -168,7 +167,7 @@ public class LabfolderCodeChallengeIT {
     }
 
     @Test
-    public void testWordCountDifferentUser() throws MalformedURLException, IOException {
+    public void testWordCountDifferentUser() throws IOException {
         wordSupplier.provideWords("username1",
                 new LinkedList<>(Arrays.asList("x", "y", "123")));
 
