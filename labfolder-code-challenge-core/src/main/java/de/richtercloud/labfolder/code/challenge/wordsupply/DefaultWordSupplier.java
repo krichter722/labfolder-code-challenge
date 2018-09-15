@@ -53,7 +53,7 @@ public class DefaultWordSupplier implements WordSupplier {
     public void provideWords(String username,
             List<String> words) throws IllegalArgumentException {
         Preconditions.checkArgument(words != null, "words mustn't be null");
-        Preconditions.checkArgument(!words.contains(""), "words mustn't contain the empty string (provision of empty is conter-intuitive)");
+        Preconditions.checkArgument(!words.contains(""), "words mustn't contain the empty string (provision of empty string as word is conter-intuitive)");
         List<String> userWords = providedWords.get(username);
         if(userWords == null) {
             userWords = new LinkedList<>(words);
