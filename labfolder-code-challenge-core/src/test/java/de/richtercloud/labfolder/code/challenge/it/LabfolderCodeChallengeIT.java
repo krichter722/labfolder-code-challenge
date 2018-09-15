@@ -8,6 +8,7 @@ import de.richtercloud.labfolder.code.challenge.rest.WordCountRestController;
 import de.richtercloud.labfolder.code.challenge.wordsupply.WordSupplier;
 import io.restassured.RestAssured;
 import static io.restassured.RestAssured.when;
+import io.restassured.specification.RequestSpecification;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -183,6 +184,39 @@ public class LabfolderCodeChallengeIT {
                         .statusCode(HttpStatus.SC_OK)
                         .and().contentType("application/json")
                         .and().body(new WordCountResponseDeserializationMatcher(new WordCountResponse(keyword, 0, new LinkedList<>())));
+    }
+
+    @Test
+    public void testProvideWordsGetNotAllowed() throws IOException {
+        RequestSpecification request = RestAssured.with().basePath(String.format("%s%s/username",
+                WordCountRestController.PATH,
+                WordCountRestController.PROVIDE_WORDS_METHOD));
+        request.body("[\"abc\", \"\"]")
+                .get()
+                .then()
+                        .statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
+    }
+
+    @Test
+    public void testProvideWordsPostNotAllowed() throws IOException {
+        RequestSpecification request = RestAssured.with().basePath(String.format("%s%s/username",
+                WordCountRestController.PATH,
+                WordCountRestController.PROVIDE_WORDS_METHOD));
+        request.body("[\"abc\", \"\"]")
+                .post()
+                .then()
+                        .statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
+    }
+
+    @Test
+    public void testProvideWordsDeleteNotAllowed() throws IOException {
+        RequestSpecification request = RestAssured.with().basePath(String.format("%s%s/username",
+                WordCountRestController.PATH,
+                WordCountRestController.PROVIDE_WORDS_METHOD));
+        request.body("[\"abc\", \"\"]")
+                .delete()
+                .then()
+                        .statusCode(HttpStatus.SC_METHOD_NOT_ALLOWED);
     }
 
     private class WordCountResponseDeserializationMatcher extends BaseMatcher<String> {
