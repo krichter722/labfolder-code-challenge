@@ -1,0 +1,24 @@
+[submodule "code-analysis"]
+	path = code-analysis
+	url = https://github.com/krichter722/code-analysis.git
+[submodule "checkstyle-config"]
+	path = checkstyle-config
+	url = https://gitlab.com/krichter/checkstyle-config.git
+[submodule "labfolder-code-challenge/checkstyle-config"]
+	path = labfolder-code-challenge/checkstyle-config
+	url = https://gitlab.com/krichter/checkstyle-config.git
+[submodule "labfolder-code-challenge/code-analysis"]
+	path = labfolder-code-challenge/code-analysis
+	url = https://github.com/krichter722/code-analysis.git
+[submodule "labfolder-code-challenge-it/code-analysis"]
+	path = labfolder-code-challenge-it/code-analysis
+	url = https://github.com/krichter722/code-analysis.git
+[submodule "labfolder-code-challenge-core/code-analysis"]
+	path = labfolder-code-challenge-core/code-analysis
+	url = https://github.com/krichter722/code-analysis.git
+[submodule "labfolder-code-challenge-core/checkstyle-config"]
+	path = labfolder-code-challenge-core/checkstyle-config
+	url = https://gitlab.com/krichter/checkstyle-config.git
+[submodule "labfolder-code-challenge-it/checkstyle-config"]
+	path = labfolder-code-challenge-it/checkstyle-config
+	url = https://gitlab.com/krichter/checkstyle-config.git
